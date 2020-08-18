@@ -1,0 +1,13 @@
+include(default)
+
+[settings]
+os=Android
+os.api_level=16
+compiler=clang
+compiler.version=9
+arch=armv7
+compiler.libcxx=c++_static
+
+[build_requires]
+*: android-toolchain/r21d@conan-burrito/stable
+&: android-toolchain/r21d@conan-burrito/stable
