@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install dependencies
-        run:  pip install conan
+        run:  pip3 install conan
       - name: Setup conan
         run: |
             conan remote add conan-burrito ${{ env.CONAN_REMOTE }}
@@ -61,7 +61,7 @@ jobs:
             conan create -pr ./profiles/android . inspector-test/0.1
 
   ubuntu:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v1
       - name: Install dependencies
