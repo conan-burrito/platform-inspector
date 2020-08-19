@@ -49,7 +49,7 @@ class PlatformInspector(object):
         self._conanfile.output.info("Conan info file created %s" % (generator.filename))
         save(join(self._build_folder, generator.filename), content, only_if_modified=True)
 
-    def __init__(self, conanfile, verbose=False, languages='C CXX ASM'):
+    def __init__(self, conanfile, verbose=False, cmake_generator='Ninja', languages='C CXX ASM'):
         self._conanfile = conanfile
         self._source_folder = tempfile.mkdtemp()
         self._build_folder = tempfile.mkdtemp()
@@ -70,7 +70,7 @@ class PlatformInspector(object):
 
         self._write_conaninfo()
 
-        cmake = CMake(conanfile, generator='Ninja')
+        cmake = CMake(conanfile, generator=cmake_generator)
         cmake.configure(source_dir=source_folder, build_dir=build_folder)
 
         self.c = None

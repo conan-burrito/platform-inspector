@@ -10,12 +10,21 @@ on:
       - "release/**"
 
 jobs:
-  macos:
-    runs-on: macos-latest
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }} 
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-20.04
+          - windows-latest
+          - macos-latest
     steps:
       - name: Install Ninja
         uses: llvm/actions/install-ninja@master
-      - uses: actions/checkout@v1
+      - name: Checkout code
+        uses: actions/checkout@v1
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -24,8 +33,6 @@ jobs:
         run: |
             python -m pip install --upgrade pip setuptools wheel
             pip install conan
-      - name: Setup conan
-        run: |
             conan remote add conan-burrito ${{ env.CONAN_REMOTE }}
             conan user -r conan-burrito -p "${{ secrets.CONAN_PASSWORD }}" ${{ secrets.CONAN_LOGIN_USERNAME }}
       - name: Export recipe
@@ -35,73 +42,15 @@ jobs:
         run: |
             cd test
             conan create . inspector-test/0.1
+      - name: Build an Android application
+        run: |
+            cd test
+            conan create -pr ./profiles/android . inspector-test/0.1
       - name: Build an iOS application
+        if: startsWith(matrix.os, 'macos')
         run: |
             cd test
             conan create -pr ./profiles/ios . inspector-test/0.1
-      - name: Build an Android application
-        run: |
-            cd test
-            conan create -pr ./profiles/android . inspector-test/0.1
-      - name: Upload
+      - name: Upload the recipe
+        if: startsWith(matrix.os, 'macos')
         run: conan upload -r conan-burrito ${{ env.CONAN_REF }}
-
-  windows:
-    runs-on: windows-latest
-    steps:
-      - name: Install Ninja
-        uses: llvm/actions/install-ninja@master
-      - uses: actions/checkout@v1
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - name: Install dependencies
-        run: |
-            python -m pip install --upgrade pip setuptools wheel
-            pip install conan
-      - name: Setup conan
-        run: |
-            conan remote add conan-burrito ${{ env.CONAN_REMOTE }}
-            conan user -r conan-burrito -p "${{ secrets.CONAN_PASSWORD }}" ${{ secrets.CONAN_LOGIN_USERNAME }}
-      - name: Export recipe
-        run: |
-            conan export . ${{ env.CONAN_REF }}
-      - name: Build a native application
-        run: |
-            cd test
-            conan create . inspector-test/0.1
-      - name: Build an Android application
-        run: |
-            cd test
-            conan create -pr ./profiles/android . inspector-test/0.1
-
-  ubuntu:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Install Ninja
-        uses: llvm/actions/install-ninja@master
-      - uses: actions/checkout@v1
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - name: Install dependencies
-        run: |
-            python -m pip install --upgrade pip setuptools wheel
-            pip install conan
-      - name: Setup conan
-        run: |
-            conan remote add conan-burrito ${{ env.CONAN_REMOTE }}
-            conan user -r conan-burrito -p "${{ secrets.CONAN_PASSWORD }}" ${{ secrets.CONAN_LOGIN_USERNAME }}
-      - name: Export recipe
-        run: |
-            conan export . ${{ env.CONAN_REF }}
-      - name: Build a native application
-        run: |
-            cd test
-            conan create . inspector-test/0.1
-      - name: Build an Android application
-        run: |
-            cd test
-            conan create -pr ./profiles/android . inspector-test/0.1
