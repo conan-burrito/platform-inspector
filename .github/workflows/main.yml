@@ -57,10 +57,11 @@ jobs:
         run: |
             cd test
             conan create . inspector-test/0.1
+      - name: Set CMake generator
+        run: echo '::set-env name=CONAN_CMAKE_GENERATOR_PLATFORM::Ninja'
       - name: Build an Android application
         run: |
             cd test
-            export CONAN_CMAKE_GENERATOR_PLATFORM=Ninja
             conan create -pr ./profiles/android . inspector-test/0.1
 
   ubuntu:
@@ -68,7 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install dependencies
-        run:  pip3 install conan
+        run:  pip3 install --user conan
       - name: Setup conan
         run: |
             conan remote add conan-burrito ${{ env.CONAN_REMOTE }}
