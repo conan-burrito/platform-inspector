@@ -70,7 +70,7 @@ class PlatformInspector(object):
 
         self._write_conaninfo()
 
-        cmake = CMake(conanfile)
+        cmake = CMake(conanfile, generator='Ninja')
         cmake.configure(source_dir=source_folder, build_dir=build_folder)
 
         self.c = None
