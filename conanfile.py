@@ -96,7 +96,9 @@ class PlatformInspector(object):
             out = f.readlines()
 
         if verbose:
-            conanfile.output.info('Lines: %s' % out)
+            conanfile.output.info('-- Inspector output:')
+            for line in out:
+                conanfile.output.info(line)
 
         for line in out:
             line = line.strip()

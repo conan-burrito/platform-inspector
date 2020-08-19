@@ -41,6 +41,8 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
+      - name: Install Ninja
+        uses: llvm/actions/install-ninja@master
       - uses: actions/checkout@v1
       - name: Install dependencies
         run:  pip install conan
@@ -58,6 +60,7 @@ jobs:
       - name: Build an Android application
         run: |
             cd test
+            export CONAN_CMAKE_GENERATOR_PLATFORM=Ninja
             conan create -pr ./profiles/android . inspector-test/0.1
 
   ubuntu:
@@ -65,7 +68,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install dependencies
-        run:  pip install conan
+        run:  pip3 install conan
       - name: Setup conan
         run: |
             conan remote add conan-burrito ${{ env.CONAN_REMOTE }}
