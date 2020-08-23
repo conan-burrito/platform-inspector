@@ -18,7 +18,13 @@ conan_basic_setup()
 
 file(WRITE ${CMAKE_BINARY_DIR}/inspection.txt
 "[[CXX][${CMAKE_CXX_COMPILER}]]
+[[CXX_COMPILER_VERSION][${CMAKE_CXX_COMPILER_VERSION}]]
+[[CXX_COMPILER_ID][${CMAKE_CXX_COMPILER_ID}]]
+[[CXX_COMPILER_TARGET][${CMAKE_CXX_COMPILER_TARGET}]]
 [[C][${CMAKE_C_COMPILER}]]
+[[C_COMPILER_VERSION][${CMAKE_C_COMPILER_VERSION}]]
+[[C_COMPILER_ID][${CMAKE_C_COMPILER_ID}]]
+[[C_COMPILER_TARGET][${CMAKE_C_COMPILER_TARGET}]]
 [[AR][${CMAKE_AR}]]
 [[LD][${CMAKE_LINKER}]]
 [[NM][${CMAKE_NM}]]
@@ -74,7 +80,13 @@ class PlatformInspector(object):
         cmake.configure(source_dir=source_folder, build_dir=build_folder)
 
         self.c = None
+        self.c_compiler_version = None
+        self.c_compiler_id = None
+        self.c_compiler_target = None
         self.cxx = None
+        self.cxx_compiler_version = None
+        self.cxx_compiler_id = None
+        self.cxx_compiler_target = None
         self.ar = None
         self.ld = None
         self.nm = None
@@ -111,8 +123,20 @@ class PlatformInspector(object):
 
             if name == 'CXX':
                 self.cxx = value
+            if name == 'CXX_COMPILER_VERSION':
+                self.cxx_compiler_version = value
+            if name == 'CXX_COMPILER_ID':
+                self.cxx_compiler_id = value
+            if name == 'CXX_COMPILER_TARGET':
+                self.cxx_compiler_target = value
             elif name == 'C':
                 self.c = value
+            if name == 'C_COMPILER_VERSION':
+                self.c_compiler_version = value
+            if name == 'C_COMPILER_ID':
+                self.c_compiler_id = value
+            if name == 'C_COMPILER_TARGET':
+                self.c_compiler_target = value
             elif name == 'AR':
                 self.ar = value
             elif name == 'LD':
