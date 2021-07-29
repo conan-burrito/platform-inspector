@@ -69,7 +69,7 @@ class PlatformInspector(object):
             f.write(full_text )
 
         conanfile.output.info('Source folder: %s' % source_folder)
-        conanfile.output.info('Bild folder: %s' % build_folder)
+        conanfile.output.info('Build folder: %s' % build_folder)
 
         if verbose:
             conanfile.output.info(self._conanfile.env)
@@ -177,5 +177,6 @@ class PlatformInspector(object):
 class Pkg(ConanFile):
     name = 'platform-inspector'
     version = '0.0.1'
-    description = "A silly helper for extracting compiler and it's settings from CMake cache, assuming all our toolchains are built upon CMake"
+    description = "A silly helper for extracting compiler and it's settings from CMake cache, assuming all our " \
+                  "toolchains are built upon CMake"
     url = ''

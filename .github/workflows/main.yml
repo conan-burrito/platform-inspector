@@ -1,13 +1,13 @@
 name: build_and_test
 
 env:
-  CONAN_REF: "platform-inspector/0.0.1@conan-burrito/stable"
+  CONAN_REF: "platform-inspector/0.0.1"
+  CONAN_USERNAME: "conan-burrito"
   CONAN_UPLOAD: "https://conan.yobasoft.de"
+  CONAN_UPLOAD_RETRY: 50
   CONAN_STABLE_BRANCH_PATTERN: "release/*"
   CONAN_LOGIN_USERNAME: "${{ secrets.CONAN_LOGIN_USERNAME }}"
   CONAN_PASSWORD: "${{ secrets.CONAN_PASSWORD }}"
-  BINTRAY_USER: "${{ secrets.BINTRAY_USER }}"
-  BINTRAY_PASSWORD: "${{ secrets.BINTRAY_PASSWORD }}"
 
 on:
   push:
@@ -62,9 +62,3 @@ jobs:
       - name: Upload the recipe
         if: startsWith(matrix.os, 'macos')
         run: conan upload -r conan-burrito ${{ env.CONAN_REF }}
-      - name: Push recipe into Bintray
-        if: startsWith(matrix.os, 'macos')
-        run: |
-            conan remote add bintray-burrito https://api.bintray.com/conan/conan-burrito/main
-            conan user -p ${{ env.BINTRAY_PASSWORD }} -r bintray-burrito ${{ env.BINTRAY_USER }}
-            conan upload -r bintray-burrito ${{ env.CONAN_REF }}
