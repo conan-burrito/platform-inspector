@@ -46,7 +46,7 @@ jobs:
             conan config install ${{ github.workspace }}/profiles/settings.yml
       - name: Export recipe
         run: |
-            conan export . ${{ env.CONAN_REF }}
+            conan export . ${{ env.CONAN_REF }}@${{ env.CONAN_USERNAME }}/stable
       - name: Build a native application
         run: |
             cd test
