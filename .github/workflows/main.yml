@@ -8,7 +8,6 @@ env:
   CONAN_STABLE_BRANCH_PATTERN: "release/*"
   CONAN_LOGIN_USERNAME: "${{ secrets.CONAN_LOGIN_USERNAME }}"
   CONAN_PASSWORD: "${{ secrets.CONAN_PASSWORD }}"
-  FULL_REF: "${{ CONAN_REF }}@${{ CONAN_USERNAME }}/stable"
 
 on:
   push:
@@ -47,7 +46,7 @@ jobs:
             conan config install ${{ github.workspace }}/profiles/settings.yml
       - name: Export recipe
         run: |
-            conan export . ${{ env.FULL_REF }}
+            conan export . ${{ CONAN_REF }}@${{ CONAN_USERNAME }}/stable
       - name: Build a native application
         run: |
             cd test
@@ -68,4 +67,4 @@ jobs:
             conan create -pr ${{ github.workspace }}/profiles/ios . inspector-test/0.1
       - name: Upload the recipe
         if: startsWith(matrix.os, 'macos')
-        run: conan upload -r conan-burrito ${{ env.FULL_REF }}
+        run: conan upload -r conan-burrito ${{ CONAN_REF }}@${{ CONAN_USERNAME }}/stable
