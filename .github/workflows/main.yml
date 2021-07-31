@@ -8,7 +8,7 @@ env:
   CONAN_STABLE_BRANCH_PATTERN: "release/*"
   CONAN_LOGIN_USERNAME: "${{ secrets.CONAN_LOGIN_USERNAME }}"
   CONAN_PASSWORD: "${{ secrets.CONAN_PASSWORD }}"
-  FULL_REF: "${{ env.CONAN_REF }}@${{ env.CONAN_USERNAME }}/stable"
+  FULL_REF: "${{ CONAN_REF }}@${{ CONAN_USERNAME }}/stable"
 
 on:
   push:
