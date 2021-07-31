@@ -176,7 +176,7 @@ class PlatformInspector(object):
 
 class Pkg(ConanFile):
     name = 'platform-inspector'
-    version = '0.0.1'
+    version = '0.0.2'
     description = "A silly helper for extracting compiler and it's settings from CMake cache, assuming all our " \
                   "toolchains are built upon CMake"
     url = ''

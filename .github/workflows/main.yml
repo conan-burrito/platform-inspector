@@ -1,7 +1,7 @@
 name: build_and_test
 
 env:
-  CONAN_REF: "platform-inspector/0.0.1"
+  CONAN_REF: "platform-inspector/0.0.2"
   CONAN_USERNAME: "conan-burrito"
   CONAN_UPLOAD: "https://conan.yobasoft.de"
   CONAN_UPLOAD_RETRY: 50
@@ -43,6 +43,7 @@ jobs:
             pip install conan conan_package_tools
             conan remote add conan-burrito ${{ env.CONAN_UPLOAD }}
             conan user -r conan-burrito -p "${{ env.CONAN_PASSWORD }}" ${{ secrets.CONAN_LOGIN_USERNAME }}
+            conan config install ${{ github.workspace }}/profiles/settings.yml
       - name: Export recipe
         run: |
             conan export . ${{ env.CONAN_REF }}
@@ -50,6 +51,11 @@ jobs:
         run: |
             cd test
             conan create . inspector-test/0.1
+      - name: Build WASM
+        if: ${{ ! startsWith(matrix.os, 'windows') }}
+        run: |
+            cd test
+            conan create -pr ${{ github.workspace }}/profiles/emscripten . inspector-test/0.1
       - name: Build an Android application
         run: |
             cd test
